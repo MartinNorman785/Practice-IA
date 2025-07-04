@@ -1,20 +1,32 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-%}
-<h1 align="center">Notes</h1>
-<ul class="list-group list-group-flush" id="notes">
+{% extends "base.html" %}
+{% block title %}Select a Child{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
   {% if user.parentAccess %}
-    {% for child in user.children %}
-    <li class="list-group-item">
-      {{ child }}
-    </li>
-    {% endfor %}
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Select a Child</h4>
+      </div>
+      <div class="card-body">
+        <form method="POST">
+          <div class="mb-3">
+            <label for="child_id" class="form-label">Choose a child:</label>
+            <select name="child_id" id="child_id" class="form-select" required>
+              {% for child in user.children %}
+                <option value="{{ child.id }}">{{ child.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn btn-success">Continue</button>
+          <a href="/" class="btn btn-secondary ms-2">Back to Dashboard</a>
+        </form>
+      </div>
+    </div>
+  {% else %}
+    <div class="alert alert-info">
+      You are currently logged in as a child. <a href="/view-child" class="alert-link">View your profile</a>.
+    </div>
   {% endif %}
-</ul>
-<form method="POST">
-  <textarea name="note" id="note" class="form-control"></textarea>
-  <br />
-  <div align="center">
-    <button type="submit" class="btn btn-primary">Add Note</button>
-  </div>
-</form>
+</div>
 {% endblock %}

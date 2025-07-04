@@ -21,18 +21,19 @@ def login():
         user = Parent.query.filter_by(name=name).first()
         if user:
             if decryptData(user.password) == password:
-                flash('Logged in successfully!'+ str(user.getChildren()), category='success')
+                flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
 
                 return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
         else:
-            user = Child.query.filter_by(name=name).first()
-            if user:
-                if decryptData(user.password) == password:
+            child = Child.query.filter_by(name=name).first()
+            if child:
+                print(child.name, child.balance)
+                if decryptData(child.getPassword()) == password:
                     flash('Logged in successfully!', category='success')
-                    login_user(user, remember=True)
+                    login_user(child, remember=True)
                     return redirect(url_for('views.home'))
                 else:
                     flash('Incorrect password, try again.', category='error')
@@ -70,7 +71,7 @@ def create_child():
         elif len(password1) < 3:
             flash('Password must be at least 3 characters.', category='error')
         else:
-            new_user = Child(name=name, password=encryptData(password1), dob=dob, balance=balance)
+            new_user = Child(name=name, password=encryptData(password1), dob=dob, balance=balance*100)
             db.session.add(new_user)
             current_user.addChild(new_user)
             db.session.commit()
@@ -114,7 +115,7 @@ def encryptData(data):
         a = ord(x);
         a = a + 41;
         encrypted = encrypted + chr(a);
-    
+    print(encrypted)
     return encrypted;
 
 def decryptData(data):

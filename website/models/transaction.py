@@ -3,6 +3,7 @@ from flask_login import UserMixin
 from sqlalchemy.sql import func
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
+from .child import Child
 
 
 class Transaction(db.Model):
@@ -16,6 +17,8 @@ class Transaction(db.Model):
         self.description = description
 
     def changeValue(self, value):
+
+        Child.query.filter_by(id=self.child_id).first().balance += value - self.value
         self.value = value
 
     def changeAccount(self, account):

@@ -19,18 +19,18 @@ class Chore(db.Model):
     def __str__(self):
         string = self.name
         if self.description != '':
-            string = string + " (" + description + ")"
+            string = string + " (" + self.description + ")"
 
         string = string + ": "
         if self.value > 0:
-            string = string + "Earns " + self.completionValueString()
+            string = string + "Earns " + self.getValueString()
         else:
             string = string + "Mandatory"
-
-        string = string + ", Due By " + self.getStringCompleteByDay() + "\n   "
+        if self.dueDate is not None:
+            string = string + ", Due By " + self.getStringCompleteByDay() + ""
 
         if self.recurring != "never":
-            string = string + "Recurrs " + self.recurring
+            string = string + ", Recurrs " + self.recurring
         return string
     
     def changeName(self, name, description):
@@ -64,44 +64,44 @@ class Chore(db.Model):
         self.overdue = false
 
     def getCompleteByDay(self):
-        return self.complete_by_date
+        return self.dueDate
 
     def getStringCompleteByDay(self):
-        return self.complete_by_date.strftime("%a, %d %b")
+        return self.dueDate.strftime("%a, %d %b")
     
     def setCompleteByDate(self):
         if (self.isWeekly()):
-            self.complete_by_date = date.now() + timedelta(days=7)
+            self.dueDate = date.now() + timedelta(days=7)
         elif (self.isDaily()):
-            self.complete_by_date = date.now() + timedelta(days=1)
+            self.dueDate = date.now() + timedelta(days=1)
         elif (self.isMonthly()):
-            self.complete_by_date = date.now() + relativedelta(months=1)
+            self.dueDate = date.now() + relativedelta(months=1)
         else:
-            self.complete_by_date = date.now() + timedelta(days=7)
+            self.dueDate = date.now() + timedelta(days=7)
     
     def setCompleteByDate(self, day):
-        self.complete_by_date = day
+        self.dueDate = day
 
     def advanceCompleteByDate(self):
         if (self.isWeekly()):
-            complete_by_date = complete_by_date + timedelta(days=7)
+            dueDate = dueDate + timedelta(days=7)
         elif (self.isDaily()):
-            complete_by_date = complete_by_date + timedelta(days=1)
+            dueDate = dueDate + timedelta(days=1)
         elif (self.isMonthly()):
-            complete_by_date = complete_by_date + relativedelta(months=1)
+            dueDate = dueDate + relativedelta(months=1)
         
     def checkOverdue(self):
-        if complete_by_date > date.now():
+        if dueDate > date.now():
             return True
         else:
             return False
 
     def hasDueDate(self, date):
-        return self.complete_by_date == date
+        return self.dueDate == date
     
 
     def dueDateBefore(self, date):
-        return self.complete_by_date < date
+        return self.dueDate < date
 
     def complete(self, account, day=""):
         if (not self.mandatory):

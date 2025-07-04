@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}View Child{% endblock %}
+{% block content %}
+
+<div class="container py-4">
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h1 class="card-title">{{ child.name }}</h1>
+      <p class="card-text"><strong>Age:</strong> {{ child.getAge() }}</p>
+      <p class="card-text"><strong>DOB:</strong> {{ child.getDOBString() }}</p>
+      <p class="card-text"><strong>Balance:</strong> <span class="text-success">{{ child.getBalanceString() }}</span></p>
+    </div>
+  </div>
+
+    <div class="card shadow-sm mb-4">
+    <div class="card-body text-center">
+        <a href="{{ url_for('views.manage_child', child_id=child.id) }}" class="btn btn-success btn-lg">
+        ➕ Manage Child (Add Chore, Goal or Transaction)
+        </a>
+    </div>
+    </div>
+
+  <!-- Goals -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">Goals</div>
+    <ul class="list-group list-group-flush">
+      {% for goal in child.goals %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>{{goal.__str__()}}</span>
+          <a href="{{ url_for('views.edit_goal', goal_id=goal.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+        </li>
+      {% else %}
+        <li class="list-group-item text-muted">No goals found.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Chores -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-warning">Chores</div>
+    <ul class="list-group list-group-flush">
+      {% for chore in child.chores %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>{{chore.__str__()}}</span>
+          <a href="{{ url_for('views.edit_chore', chore_id=chore.id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+        </li>
+      {% else %}
+        <li class="list-group-item text-muted">No chores assigned.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Transactions -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-info text-white">Transactions</div>
+    <ul class="list-group list-group-flush">
+      {% for transaction in child.transactions %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>{{transaction.__str__()}}</span>
+          <a href="{{ url_for('views.edit_transaction', transaction_id=transaction.id) }}" class="btn btn-sm btn-outline-info">Edit</a>
+        </li>
+      {% else %}
+        <li class="list-group-item text-muted">No transactions found.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+{% endblock %}

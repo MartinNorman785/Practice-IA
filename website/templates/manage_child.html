@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Manage {{ child.name }}{% endblock %}
+{% block content %}
+
+<div class="container py-4">
+  <h2 class="mb-4 text-center">Manage {{ child.name }}</h2>
+
+  <!-- Chore Form -->
+  <div class="card mb-4">
+    <div class="card-header bg-warning text-white">Add New Chore</div>
+    <div class="card-body">
+      <form method="POST" action="{{ url_for('views.add_chore', child_id=child.id) }}">
+        <div class="mb-3">
+          <label for="chore_name" class="form-label">Chore Name</label>
+          <input type="text" class="form-control" id="chore_name" name="chore_name" required>
+        </div>
+        <div class="mb-3">
+          <label for="chore_description" class="form-label">Description</label>
+          <input type="text" class="form-control" id="chore_description" name="chore_description" required>
+        </div>
+        <div class="mb-3">
+          <label for="chore_value" class="form-label">Value (in cents)</label>
+          <input type="number" class="form-control" id="chore_value" name="chore_value" required>
+        </div>
+        <div class="mb-3">
+          <label for="recurring" class="form-label">Recurring?</label>
+          <select class="form-select" id="recurring" name="recurring">
+            <option value="none">None</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-warning">Add Chore</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Goal Form -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">Add New Goal</div>
+    <div class="card-body">
+      <form method="POST" action="{{ url_for('views.add_goal', child_id=child.id) }}">
+        <div class="mb-3">
+          <label for="goal_name" class="form-label">Goal Name</label>
+          <input type="text" class="form-control" id="goal_name" name="goal_name" required>
+        </div>
+        <div class="mb-3">
+          <label for="goal_value" class="form-label">Value (in cents)</label>
+          <input type="number" class="form-control" id="goal_value" name="goal_value" required>
+        </div>
+        <div class="mb-3">
+          <label for="goal_due" class="form-label">Due Date</label>
+          <input type="date" class="form-control" id="goal_due" name="goal_due">
+        </div>
+        <div class="mb-3">
+          <label for="goal_description" class="form-label">Description (optional)</label>
+          <input type="text" class="form-control" id="goal_description" name="goal_description">
+        </div>
+        <button type="submit" class="btn btn-primary">Add Goal</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Transaction Form -->
+  <div class="card mb-4">
+    <div class="card-header bg-info text-white">Add New Transaction</div>
+    <div class="card-body">
+      <form method="POST" action="{{ url_for('views.add_transaction', child_id=child.id) }}">
+        <div class="mb-3">
+          <label for="transaction_value" class="form-label">Value (in cents, use negative for withdrawal)</label>
+          <input type="number" class="form-control" id="transaction_value" name="transaction_value" required>
+        </div>
+        <div class="mb-3">
+          <label for="transaction_description" class="form-label">Description</label>
+          <input type="text" class="form-control" id="transaction_description" name="transaction_description" required>
+        </div>
+        <div class="mb-3">
+          <label for="transaction_date" class="form-label">Date</label>
+          <input type="date" class="form-control" id="transaction_date" name="transaction_date">
+        </div>
+        <button type="submit" class="btn btn-info">Add Transaction</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="{{ url_for('views.view_child', child_id=child.id) }}" class="btn btn-secondary">⬅ Back to View Child</a>
+  </div>
+</div>
+
+{% endblock %}

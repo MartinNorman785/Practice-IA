@@ -14,12 +14,12 @@ class Goal(db.Model):
     child_id = db.Column(db.Integer, db.ForeignKey('child.id'))
 
     def __str__(self):
-        string = name
-        if (description != ""):
-            string = string + " (" + description + "):    "
+        string = self.name
+        if (self.description != ""):
+            string = string + " (" + self.description + "):    "
         else:
             string = string + ":    "
-        if (dueDate is not None):
+        if (self.dueDate is not None):
             string = string + self.getStringDate() + "    "
         return string + self.getValueString()
     
